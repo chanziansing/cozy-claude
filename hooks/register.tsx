@@ -396,8 +396,8 @@ export const register: Register = on => {
 
     const meta = (s: Sprite) => {
       const time = fmtTime((s.endedAt ?? at) - s.startedAt)
-      const steps = s.kind === 'agent' && s.steps > 0 ? ` · ${'✉'.repeat(Math.min(s.steps, 6))}${s.steps > 6 ? `+${s.steps - 6}` : ''}` : ''
-      return `${whatIs(s)} · ${statusWord(s.status)} · ${time}${steps}`
+      const steps = s.kind === 'agent' && s.steps > 0 ? ` · ${s.steps} tool call${s.steps === 1 ? '' : 's'}` : ''
+      return `${s.kind === 'shell' ? 'shell' : 'subagent'} · ${whatIs(s)} · ${statusWord(s.status)} · ${time}${steps}`
     }
 
     if (e.surface !== 'terminal' && 'Svg' in ui) {

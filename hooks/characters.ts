@@ -241,17 +241,24 @@ export function gull(s: number, delay: number) {
     <animate attributeName="d" values="M-6 0 Q-3 -3 0 0 Q3 -3 6 0;M-6 -1 Q-3 1 0 0 Q3 1 6 -1;M-6 0 Q-3 -3 0 0 Q3 -3 6 0" dur="0.8s" begin="${delay}s" repeatCount="indefinite"/></path></g>`
 }
 
-/** A loaf of the bakery's bread, steam rising: a background chore baking. */
-export function loaf(s: number) {
+/** A loaf of the bakery's bread, steam rising: a background chore baking. `kind` picks the bread. */
+export function loaf(s: number, kind: 'loaf' | 'baguette' | 'bun' = 'loaf') {
   const steam = [-3, 0, 3]
     .map(
       (x, i) =>
         `<path d="M${x} -6 q-1 -2 0 -4 q1 -2 0 -4" stroke="#e8e2f5" class="k-steam" stroke-width="0.8" fill="none" opacity="0"><animate attributeName="opacity" values="0;0.9;0" dur="2s" begin="${i * 0.6}s" repeatCount="indefinite"/><animateTransform attributeName="transform" type="translate" values="0 2;0 -2" dur="2s" begin="${i * 0.6}s" repeatCount="indefinite"/></path>`,
     )
     .join('')
-  return `<g transform="scale(${s})">${steam}
-    <path d="M-8 4 C -9 -4, 9 -4, 8 4 Z" fill="#e3a157"/><path d="M-8 4 C -9 -4, 9 -4, 8 4 Z" fill="none" stroke="#b9763a" stroke-width="0.6"/>
-    <path d="M-4 -1.5 l1.5 2 M0 -2.2 l1.5 2 M4 -1.5 l1.5 2" stroke="#f6d3a0" stroke-width="0.9" stroke-linecap="round"/></g>`
+  const bread =
+    kind === 'baguette'
+      ? `<g transform="rotate(-14)"><rect x="-10" y="-1" width="20" height="5" rx="2.5" fill="#e3a157" stroke="#b9763a" stroke-width="0.6"/>
+        <path d="M-6 0 l2 2.4 M-1.5 0 l2 2.4 M3 0 l2 2.4" stroke="#f6d3a0" stroke-width="0.9" stroke-linecap="round"/></g>`
+      : kind === 'bun'
+        ? `<path d="M-6.5 4 C -7.5 -4, 7.5 -4, 6.5 4 Z" fill="#d9893f" stroke="#a9692f" stroke-width="0.6"/>
+        <g fill="#fff4dd"><ellipse cx="-2.5" cy="-0.5" rx="0.6" ry="0.35"/><ellipse cx="1" cy="-1.4" rx="0.6" ry="0.35"/><ellipse cx="3.2" cy="0.4" rx="0.6" ry="0.35"/><ellipse cx="-0.6" cy="1.2" rx="0.6" ry="0.35"/></g>`
+        : `<path d="M-8 4 C -9 -4, 9 -4, 8 4 Z" fill="#e3a157"/><path d="M-8 4 C -9 -4, 9 -4, 8 4 Z" fill="none" stroke="#b9763a" stroke-width="0.6"/>
+    <path d="M-4 -1.5 l1.5 2 M0 -2.2 l1.5 2 M4 -1.5 l1.5 2" stroke="#f6d3a0" stroke-width="0.9" stroke-linecap="round"/>`
+  return `<g transform="scale(${s})">${steam}${bread}</g>`
 }
 
 /** A delivered parcel with a red bow and a green stamp; `isFresh` stamps it as you watch, with a ring that ripples out. */

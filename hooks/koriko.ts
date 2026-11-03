@@ -18,6 +18,26 @@ export const ARRIVAL_MS = 4000
 // ---------- the band above the prompt ----------
 
 /**
+ * Gulls for the other deliveries in flight, scattered round Kiki rather than lined up behind her: each one's spot,
+ * drift and wingbeat come from its delivery's id, so a gull keeps its place from one redraw to the next.
+ */
+function flock(list: Sprite[], s: number) {
+  return list
+    .map(sp => {
+      const h = hash(sp.id)
+      const r = (k: number) => scatter(h % 997, k)
+      // Behind and around her, or up ahead and above, never on top of her.
+      const x = -40 + r(1) * 54
+      const y = x > -10 ? -18 - r(2) * 5 : -16 + r(2) * 24
+      const dx = ((r(3) - 0.5) * 10).toFixed(1)
+      const dy = ((r(4) - 0.5) * 7).toFixed(1)
+      const dur = (3.2 + r(5) * 3).toFixed(2)
+      return `<g transform="translate(${x.toFixed(1)} ${y.toFixed(1)})"><g><animateTransform attributeName="transform" type="translate" values="0 0;${dx} ${dy};0 0" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" dur="${dur}s" repeatCount="indefinite"/>${gull(s * (0.8 + r(6) * 0.4), r(7))}</g></g>`
+    })
+    .join('')
+}
+
+/**
  * Kiki's route: the bakery on the left, one house per delivery along the shore.
  * Delivered houses glow; Kiki glides from the last one she reached toward the
  * next, easing off as she nears it, so she is always on her way and never parked.
@@ -63,16 +83,13 @@ export function bandSvg(w: number, list: Sprite[], look: Look = 'dark') {
   const glideTo = isDone ? toX : fromX + (toX - fromX) * 0.82
   const kikiY = routeY + 2
 
-  const flock = running
-    .slice(1, 4)
-    .map((s, i) => `<g transform="translate(${-16 - i * 13} ${-6 + (i % 2) * 9})">${gull(0.6, (hash(s.id) % 8) / 10)}</g>`)
-    .join('')
+  const gulls = flock(running.slice(1, 4), 0.6)
   const rider =
     total === 0
       ? ''
       : `<g transform="translate(${fromX} ${kikiY})">
           <animateTransform attributeName="transform" type="translate" values="${fromX} ${kikiY};${glideTo} ${isDone ? kikiY + 3 : kikiY}" dur="${isDone ? 1.6 : GLIDE_S}s" calcMode="spline" keySplines="${EASE_OUT}" keyTimes="0;1" fill="freeze"/>
-          ${flock}${kiki(0.95, { fly: true, parcel: !isDone })}
+          ${gulls}${kiki(0.95, { fly: true, parcel: !isDone })}
         </g>`
   // When the last parcel is in, sparkles burst over the final house.
   const burst = isDone
@@ -127,10 +144,7 @@ export function headerSvg(w: number, list: Sprite[], look: Look = 'dark') {
   const flyer =
     running.length > 0
       ? `<g><animateTransform attributeName="transform" type="translate" values="-40 64;${w + 40} 50" dur="16s" repeatCount="indefinite"/>
-          ${running
-            .slice(1, 4)
-            .map((s, i) => `<g transform="translate(${-26 - i * 14} ${-6 + (i % 2) * 8})">${gull(0.8, (hash(s.id) % 8) / 10)}</g>`)
-            .join('')}
+          ${flock(running.slice(1, 4), 0.8)}
           ${kiki(1.3, { fly: true })}</g>`
       : ''
   const line =
@@ -163,11 +177,36 @@ export function headerSvg(w: number, list: Sprite[], look: Look = 'dark') {
  * bounce and the stamp pops; one called off lands with the broom set down beside it; a failed one sinks as a
  * rain cloud rolls in.
  */
+const BREADS = ['loaf', 'baguette', 'bun'] as const
+
+/** What Kiki flies past in a running row, picked by the delivery's id so rows differ: night sky, moon, rooftops, clouds or a gull. */
+function flightScene(id: string) {
+  const h = hash(id)
+  switch (h % 5) {
+    case 1:
+      return `<g transform="translate(-11 -11)"><circle r="8" fill="#fff4c2" opacity="0.1" class="k-glow"/><path d="M2 -5.5 A5.6 5.6 0 1 0 2 5.5 A4.4 4.4 0 1 1 2 -5.5 Z" fill="#f3e3a1" class="k-moon"/></g>`
+    case 2:
+      return house(-20, 23, 9, 9, 'lit', ROOFS[0]!) + house(-9, 23, 10, 12, 'dark', ROOFS[1]!) + house(3, 23, 9, 8, 'lit', ROOFS[2]!) + house(14, 23, 9, 11, 'dark', ROOFS[0]!)
+    case 3: {
+      const cloud = (x: number, y: number, k: number) =>
+        `<g transform="translate(${x} ${y}) scale(${k})" fill="#d9def0" opacity="0.35"><circle cx="-4" r="3"/><circle cy="-2" r="4"/><circle cx="4" r="3"/><rect x="-7" y="0" width="14" height="3" rx="1.5"/></g>`
+      return `<g><animateTransform attributeName="transform" type="translate" values="10 0;-14 0" dur="7s" repeatCount="indefinite"/>${cloud(-6, -10, 0.9)}${cloud(14, 14, 0.7)}</g>`
+    }
+    case 4:
+      return `<g transform="translate(-13 -9)"><g><animateTransform attributeName="transform" type="translate" values="0 0;3 -2;0 0" calcMode="spline" keySplines="0.42 0 0.58 1;0.42 0 0.58 1" dur="2.6s" repeatCount="indefinite"/>${gull(0.55, (h % 7) / 10)}</g></g>`
+    default:
+      return ''
+  }
+}
+
 export function iconSvg(s: Sprite, at: number, look: Look = 'dark') {
   const size = 44
   const isFresh = s.status !== 'running' && s.endedAt !== undefined && at - s.endedAt < ARRIVAL_MS
+  // A shell is a loaf from the bakery oven; a subagent is Kiki on her broom, past a scene of its own.
   const flying =
-    s.kind === 'shell' ? `<g transform="translate(0 4)">${loaf(1.6)}</g>` : `<g transform="translate(5 6)">${kiki(0.92, { fly: true, delay: (hash(s.id) % 10) / 10 })}</g>`
+    s.kind === 'shell'
+      ? `<g transform="translate(0 4)">${loaf(1.6, BREADS[hash(s.id) % BREADS.length])}</g>`
+      : `${s.status === 'running' ? flightScene(s.id) : ''}<g transform="translate(5 6)">${kiki(0.92, { fly: true, delay: (hash(s.id) % 10) / 10 })}</g>`
   let body: string
   if (s.status === 'running') {
     body = flying

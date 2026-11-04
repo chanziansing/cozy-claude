@@ -23,7 +23,7 @@ export type CacheFacts = { lastAt: number; tokens: number; model: string | null 
 
 declare module 'claude-code' {
   interface PluginState {
-    'meadow-sprites': {
+    'cozy-claude': {
       sprites: Shaped<Sprite[]>
       batch: number
       dismissed: number

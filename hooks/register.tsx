@@ -23,15 +23,15 @@ const PANE = 'meadow'
 
 // The atoms stay in this file: the validator checks each one where it is read.
 // Change the tag when a sprite's fields change: it declines what an earlier version stored.
-const sprites = atom({ plugin: 'meadow-sprites', key: 'sprites' } as const, [], { shape: 'sprites-1' })
-const batch = atom({ plugin: 'meadow-sprites', key: 'batch' } as const, 0)
-const dismissed = atom({ plugin: 'meadow-sprites', key: 'dismissed' } as const, -1)
-const now = atom({ plugin: 'meadow-sprites', key: 'now' } as const, 0)
-const autoOpened = atom({ plugin: 'meadow-sprites', key: 'autoOpened' } as const, false)
-const windows = atom({ plugin: 'meadow-sprites', key: 'windows' } as const, [] as Window[])
-const cache = atom({ plugin: 'meadow-sprites', key: 'cache' } as const, null as CacheFacts | null)
+const sprites = atom({ plugin: 'cozy-claude', key: 'sprites' } as const, [], { shape: 'sprites-1' })
+const batch = atom({ plugin: 'cozy-claude', key: 'batch' } as const, 0)
+const dismissed = atom({ plugin: 'cozy-claude', key: 'dismissed' } as const, -1)
+const now = atom({ plugin: 'cozy-claude', key: 'now' } as const, 0)
+const autoOpened = atom({ plugin: 'cozy-claude', key: 'autoOpened' } as const, false)
+const windows = atom({ plugin: 'cozy-claude', key: 'windows' } as const, [] as Window[])
+const cache = atom({ plugin: 'cozy-claude', key: 'cache' } as const, null as CacheFacts | null)
 /** Day or night Koriko; kept in the plugin's store so the choice outlives the session. */
-const look = atom({ plugin: 'meadow-sprites', key: 'look' } as const, 'auto' as Look)
+const look = atom({ plugin: 'cozy-claude', key: 'look' } as const, 'auto' as Look)
 
 async function setLook($: EngineInterface, next: Look) {
   await update($, look, () => next)

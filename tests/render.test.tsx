@@ -4,7 +4,7 @@ import { bandSvg } from '../hooks/koriko'
 import { skySvg } from '../hooks/sky'
 
 const ABOVE = {
-  plugin: 'meadow-sprites',
+  plugin: 'cozy-claude',
   component: 'AbovePrompt',
   requestId: 'above',
   props: { hasSurvey: false, isWorking: false, maxRows: 10, bodyColumns: 100, scroll: { offset: 0, bodyRows: 10 }, view: {} },
@@ -49,7 +49,7 @@ test('your message is a letter on the desktop', async ($, on) => {
     return <Text>engine</Text>
   })
   const ui = await $.ui.mount({
-    plugin: 'meadow-sprites',
+    plugin: 'cozy-claude',
     component: 'UserMessage',
     requestId: 'm1',
     surface: 'desktop',
@@ -68,7 +68,7 @@ test('the spinner speaks Kiki', async ($, on) => {
     return <Text>{seen}</Text>
   })
   const ui = await $.ui.mount({
-    plugin: 'meadow-sprites',
+    plugin: 'cozy-claude',
     component: 'Spinner',
     requestId: 's1',
     surface: 'desktop',
@@ -95,7 +95,7 @@ test('/meadow theme saves the look, and by day your letter is cream paper', asyn
   const ran = await $.command.run({ command: 'meadow', args: 'theme light', origin: { kind: 'composer' } } as never)
   expect(JSON.stringify(ran)).toContain('by day')
   const ui = await $.ui.mount({
-    plugin: 'meadow-sprites',
+    plugin: 'cozy-claude',
     component: 'UserMessage',
     requestId: 'm2',
     surface: 'desktop',

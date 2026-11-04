@@ -1,18 +1,22 @@
 {
-  "name": "meadow-sprites",
+  "name": "cozy-claude",
   "version": "1.0.0",
-  "description": "Kiki's Delivery Service style for Claude Code: usage and prompt cache over Koriko, subagents and background tasks as deliveries Kiki flies, letter-style message bubbles, and Kiki's words on the spinner.",
+  "description": "Cozy hand-drawn themes for Claude Code. First theme, Kiki's Delivery Service: usage and prompt cache over Koriko, subagents and background tasks as deliveries Kiki flies, letter-style message bubbles, and Kiki's words on the spinner.",
   "author": {
     "name": "chanziansing",
     "url": "https://github.com/chanziansing"
   },
-  "homepage": "https://github.com/chanziansing/meadow-sprites",
-  "repository": "https://github.com/chanziansing/meadow-sprites",
+  "homepage": "https://github.com/chanziansing/cozy-claude",
+  "repository": "https://github.com/chanziansing/cozy-claude",
   "license": "MIT",
   "keywords": [
     "mod",
-    "kiki",
+    "claude-code",
+    "theme",
+    "statusline",
+    "cozy",
     "ghibli",
+    "kiki",
     "progress",
     "subagents",
     "usage"

@@ -1,4 +1,6 @@
-# meadow-sprites · Kiki's Delivery Service for Claude Code
+# cozy-claude · cozy hand-drawn themes for Claude Code
+
+A fan-made theme pack for Claude Code. The first theme is *Kiki's Delivery Service*; more are on the way. Not affiliated with Studio Ghibli.
 
 A Claude Code mod that turns the space above your prompt into the seaside town of Koriko, after *Kiki's Delivery Service*. Your usage limits and prompt cache sit in a little sky ribbon. Every subagent or background task is a parcel that Kiki flies to a house along the shore.
 
@@ -39,7 +41,7 @@ You need Claude Code with mod support. The drawings show in the Claude desktop a
 1. Clone the repo anywhere:
 
    ```bash
-   git clone https://github.com/chanziansing/meadow-sprites.git ~/.claude/local-mods/meadow-sprites
+   git clone https://github.com/chanziansing/cozy-claude.git ~/.claude/local-mods/cozy-claude
    ```
 
 2. Load it in every session by adding the folder to the `env` block of `~/.claude/settings.json`:
@@ -47,15 +49,15 @@ You need Claude Code with mod support. The drawings show in the Claude desktop a
    ```json
    {
      "env": {
-       "CLAUDE_CODE_PLUGIN_DIRS": "/absolute/path/to/meadow-sprites",
+       "CLAUDE_CODE_PLUGIN_DIRS": "/absolute/path/to/cozy-claude",
        "CLAUDE_CODE_PLUGIN_DIR_WATCH": "1"
      }
    }
    ```
 
-   `CLAUDE_CODE_PLUGIN_DIR_WATCH` reloads the mod when its files change. To try it once instead, run `claude --plugin-dir /absolute/path/to/meadow-sprites`.
+   `CLAUDE_CODE_PLUGIN_DIR_WATCH` reloads the mod when its files change. To try it once instead, run `claude --plugin-dir /absolute/path/to/cozy-claude`.
 
-3. Start a new session. `claude --plugin-dir <path> plugin list` should list `meadow-sprites` as loaded.
+3. Start a new session. `claude --plugin-dir <path> plugin list` should list `cozy-claude` as loaded.
 
 ### Optional: terminal colour theme
 
